@@ -1,0 +1,111 @@
+*mini-pick-quickui.txt*  mini.pick integration for quickui.nvim
+
+==============================================================================
+CONTENTS                                    *mini-pick-quickui-contents*
+
+  1. Introduction .............. |mini-pick-quickui-introduction|
+  2. Requirements .............. |mini-pick-quickui-requirements|
+  3. Setup ..................... |mini-pick-quickui-setup|
+  4. Options ................... |mini-pick-quickui-options|
+  5. Usage ..................... |mini-pick-quickui-usage|
+  6. Highlight Groups .......... |mini-pick-quickui-highlights|
+
+==============================================================================
+1. INTRODUCTION                         *mini-pick-quickui-introduction*
+
+mini-pick-quickui.nvim exposes the quickui.nvim menubar structure as a
+fuzzy-searchable mini.pick picker.
+
+Instead of searching by plugin command names, you search by the menu names
+and categories you defined yourself.
+
+==============================================================================
+2. REQUIREMENTS                         *mini-pick-quickui-requirements*
+
+  - Neovim 0.10+
+  - quickui.nvim
+  - mini.pick
+
+==============================================================================
+3. SETUP                                     *mini-pick-quickui-setup*
+
+Call `setup()` once during startup: >lua
+
+  require("mini-pick-quickui").setup()
+<
+
+To pass options: >lua
+
+  require("mini-pick-quickui").setup({
+    separator = " > ",
+    show_rtxt = true,
+  })
+<
+
+`setup()` also registers `quickui` into mini.pick's registry, enabling `:Pick quickui`.
+
+==============================================================================
+4. OPTIONS                                 *mini-pick-quickui-options*
+
+------------------------------------------------------------------------------
+                                   *mini-pick-quickui-opt-separator*
+separator ~
+  Type: `string`
+  Default: `" > "`
+
+  String inserted between label segments in the picker display.
+  For example, with `" > "`: `Git > Hunk > Stage`
+
+------------------------------------------------------------------------------
+                                   *mini-pick-quickui-opt-show-rtxt*
+show_rtxt ~
+  Type: `boolean`
+  Default: `true`
+
+  When `true`, the `rtxt` hint (e.g. supplementary text) is shown to the
+  right of the label, highlighted as a comment.
+
+  When `false`, `rtxt` is hidden from the display but still included in the
+  fuzzy search, so you can still search by its content.
+
+==============================================================================
+5. USAGE                                     *mini-pick-quickui-usage*
+
+Open the picker via Lua: >lua
+
+  require("mini-pick-quickui").open()
+<
+
+Open the picker via `:Pick` (registered by setup()): >vim
+
+  :Pick quickui
+<
+
+Bind to a key: >lua
+
+  vim.keymap.set("n", "<leader>/", require("mini-pick-quickui").open)
+<
+
+Pass mini.pick options directly: >lua
+
+  require("mini-pick-quickui").open({
+    window = { config = { width = 80 } },
+  })
+<
+
+==============================================================================
+6. HIGHLIGHT GROUPS                     *mini-pick-quickui-highlights*
+
+The picker uses standard Neovim highlight groups for column styling.
+
+  Type column (e.g. "File", "Git") ~
+    Highlight group: |hl-Identifier|
+
+  Label column ~
+    Default (no highlight applied)
+
+  rtxt column (supplementary hint text) ~
+    Highlight group: |hl-Comment|
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:

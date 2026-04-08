@@ -1,0 +1,7 @@
+# Neovim
+doc/tags
+
+# OS
+.DS_Store
+
+.claude/
