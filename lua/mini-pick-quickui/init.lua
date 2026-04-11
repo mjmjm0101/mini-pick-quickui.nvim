@@ -38,7 +38,7 @@ function M.open(opts)
   -- Compute max type width for column alignment.
   local max_type_len = 0
   for _, e in ipairs(entries) do
-    max_type_len = math.max(max_type_len, #e.type)
+    max_type_len = math.max(max_type_len, vim.fn.strdisplaywidth(e.type))
   end
 
   -- Build picker items.
@@ -68,7 +68,7 @@ function M.open(opts)
   ---@param item   table   picker item ({ text, _type, _label, _rtxt, _cmd })
   ---@param row    number  0-indexed row in the buffer
   local function highlight_item(buf_id, item, row)
-    local padded = item._type .. string.rep(" ", max_type_len - #item._type)
+    local padded = item._type .. string.rep(" ", max_type_len - vim.fn.strdisplaywidth(item._type))
     vim.api.nvim_buf_set_extmark(buf_id, ns, row, 0, {
       end_col  = #padded,
       hl_group = "Identifier",
@@ -92,7 +92,7 @@ function M.open(opts)
   local function show(buf_id, items_to_show, _query)
     local lines = {}
     for _, item in ipairs(items_to_show) do
-      local padded = item._type .. string.rep(" ", max_type_len - #item._type)
+      local padded = item._type .. string.rep(" ", max_type_len - vim.fn.strdisplaywidth(item._type))
       local label  = table.concat(item._label, sep)
       local line   = padded .. "  " .. label
       if config.show_rtxt and item._rtxt then
